@@ -1,0 +1,26 @@
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+#viewer {
+  width: 100%;
+}
+
+.toolbar {
+  padding: 15px;
+  background: #f7f7f7;
+}
+
+#canvas-container canvas {
+  display: block;
+  width: 100%;
+}
+
+#status {
+  padding: 10px 15px;
+  font-size: 13px;
+  color: #666;
+}
