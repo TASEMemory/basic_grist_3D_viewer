@@ -8,8 +8,13 @@ grist.ready({
 
 grist.onRecord((record) => {
   console.log('Enregistrement reçu depuis Grist :', record);
-});
 
+  const statusElement = document.querySelector('#status');
+
+  if (statusElement) {
+    statusElement.textContent = 'Ligne reçue depuis Grist ✓';
+  }
+});
 const container = document.querySelector('#viewer');
 
 container.innerHTML = `
