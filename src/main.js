@@ -6,17 +6,51 @@ grist.ready({
   requiredAccess: 'read table'
 });
 
-grist.onRecord((record) => {
-  console.log('Enregistrement reçu depuis Grist :', record);
 
+grist.ready({
+  requiredAccess: 'read table'
+});
+
+grist.onRecord(async (record) => {
   const statusElement = document.querySelector('#status');
+  const attachmentValue = record.PIECE_JOINTE;
 
-  if (statusElement) {
+  if (!attachmentValue) {
+    statusElement.textContent = 'Aucune pièce jointe sur cette ligne.';
+    return;
+  }
+
+  let attachmentId = Array.isArray(attachmentValue)
+    ? (attachmentValue[0] === 'L' ? attachmentValue[1] : attachmentValue[0])
+    : attachmentValue;
+
+  statusElement.textContent = 'Récupération du fichier...';
+
+  try {
+    const tokenInfo = await grist.docApi.getAccessToken({
+      readOnly: true
+    });
+
+    const url = `${tokenInfo.baseUrl}/attachments/${attachmentId}/download?auth=${encodeURIComponent(tokenInfo.token)}`;
+
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(`Erreur HTTP ${response.status}`);
+    }
+
+    const file = await response.blob();
+
     statusElement.textContent =
-      'Pièce jointe reçue : ' +
-      JSON.stringify(record.PIECE_JOINTE);
+      `Fichier récupéré ✓ (${file.size} octets)`;
+
+  } catch (error) {
+    console.error(error);
+    statusElement.textContent =
+      `Erreur de récupération : ${error.message}`;
   }
 });
+
 const container = document.querySelector('#viewer');
 
 container.innerHTML = `
