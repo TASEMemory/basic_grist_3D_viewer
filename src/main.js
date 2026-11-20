@@ -12,7 +12,9 @@ grist.onRecord((record) => {
   const statusElement = document.querySelector('#status');
 
   if (statusElement) {
-    statusElement.textContent = 'Ligne reçue depuis Grist ✓';
+    statusElement.textContent =
+      'Pièce jointe reçue : ' +
+      JSON.stringify(record.PIECE_JOINTE);
   }
 });
 const container = document.querySelector('#viewer');
