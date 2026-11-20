@@ -2,6 +2,13 @@ import '../style.css';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+grist.ready({
+  requiredAccess: 'read table'
+});
+
+grist.onRecord((record) => {
+  console.log('Enregistrement reçu depuis Grist :', record);
+});
 
 const container = document.querySelector('#viewer');
 
